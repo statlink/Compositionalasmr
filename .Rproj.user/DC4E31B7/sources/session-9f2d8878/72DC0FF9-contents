@@ -1,0 +1,34 @@
+cv.asmr <- function( y, x, a = seq(0.1, 1, by = 0.1), maxit = 500, tol = 1e-6, nfolds = 10, folds = NULL, ncores = 1, seed = NULL ) {
+  if ( min(y) == 0 )  a <- a[a>0]
+  la <- length(a)
+  n <- dim(y)[1]
+  ina <- 1:n
+  x <- model.matrix( y~., data=as.data.frame(x) )
+  x <- x[, -1, drop = FALSE]
+  if ( is.null(folds) )  folds <- Compositional::makefolds(ina, nfolds = nfolds,
+                                                           stratified = FALSE, seed = seed)
+  nfolds <- length(folds)
+
+  runtime <- proc.time()
+  kula <- matrix(nrow = nfolds, ncol = la)
+  for ( i in 1:nfolds ) {
+    xtest <- x[ folds[[ i ]], ]
+    ytest <- y[ folds[[ i ]], ]
+    xtrain <- x[ -folds[[ i ]], ]
+    ytrain <- y[-folds[[ i ]], ]
+    yest <- Compositionalasmr::asmr.path(ytrain, xtrain, , xnew = xtest,
+                                         maxit = maxit, tol = tol, ncores = ncores)$res
+    for ( j in 1:la ) {
+      kl <- ytest * log(ytest / yest$res[[ j ]]$est)
+      kl[ is.infinite(kl) ] <- NA
+      kula[i, j] <- sum(kl, na.rm = TRUE) / dim(ytest)[1]
+    }
+  }
+
+  kl <- Rfast::colmeans(kula)
+  opt <- c( min(kl), a[ which.min(kl) ] )
+  names(opt) <- c( "KLD", "alpha")
+  runtime <- proc.time() - runtime
+
+  list(runtime = runtime, perf = kl, opt = opt)
+}

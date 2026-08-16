@@ -1,0 +1,15 @@
+Package: Compositionalzeros
+Type: Package
+Title: Modelling Compositional Data With Zero Values
+Version: 1.0
+Date: 2026-08-07
+Authors@R: person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsagris@uoc.gr")
+Author: Michail Tsagris [aut, cre]
+Maintainer: Michail Tsagris <mtsagris@uoc.gr>
+Depends: R (>= 4.0)
+Imports: Rfast
+Suggests: Compositional, Rfast2
+Description: Modelling structural zeros in compositional data using a conditional multivariate normal model as dseribed by Aitchison (1986), where MLE is performed via the EM algorithm. The standard textbook for such data is John Aitchison's (1986) "The statistical analysis of compositional data", <>.
+License: GPL (>= 2)
+
+

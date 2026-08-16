@@ -1,0 +1,70 @@
+\name{Permutation linear independence test in the SCSMR model}
+\alias{scsmr.indeptest}
+\title{
+Permutation linear independence test in the SCSMR model
+}
+
+\description{
+Permutation linear independence test in the SCSMR model.
+}
+
+\usage{
+scsmr.indeptest(y, x, tol = 1e-6, eps = 1e-6, R = 999)
+}
+
+\arguments{
+\item{y}{
+A matrix with the compositional data (dependent variable). Zero values are allowed.
+}
+\item{x}{
+A matrix with the compositional predictors. Zero values are allowed.
+}
+\item{tol}{
+The tolerance value to terminate the IRLS algortihm.
+}
+\item{eps}{
+A small value to prevent or safeguard agains no solution of the quadratic programming.
+}
+\item{R}{
+The number of permutations to perform.
+}
+}
+
+\details{
+Permutation independence test in the constrained spatial median regression for compositional
+responses and predictors is performed. The observed test statistic is the square root of the
+of the sum of squares of the errors computed by \code{\link{scsmr}}.
+Then, the rows of X are permuted B times and each time the constrained spatial median regression
+is performed and the sum is again computed. The p-value is then computed in the usual way.
+}
+
+\value{
+The p-value for the test of independence between Y and X.
+}
+
+\references{
+Tsagris. M. (2025). Constrained least squares simplicial-simplicial regression.
+Statistics and Computing, 35(27).
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+%\note{
+  %%  ~~further notes~~
+    %}
+
+\seealso{
+\code{\link{scsmr}, \link{ascsmr} }
+}
+
+\examples{
+y <- as.matrix(iris[, 1:4])
+x <- matrix( rgamma(450, 3, 5), ncol = 3)
+x <- x / rowSums(x)
+scsmr.indeptest(y, x, R = 99)
+}
+

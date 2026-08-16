@@ -1,0 +1,68 @@
+\name{zeronormal.em}
+\alias{zeronormal.mle}
+
+\title{
+Maximum likelihood estimation of the conditional multivariate normal model
+}
+
+\description{
+Maximum likelihood estimation of the conditional multivariate normal model.
+}
+
+\usage{
+zeronormal.mle(x, tol = 1e-6, maxit = 1000)
+}
+
+\arguments{
+\item{x}{
+A numerical matrix with compositional data with zero values.
+}
+\item{tol}{
+The tolerance value to terminate the EM algorithm.
+}
+\item{maxit}{
+The maximum number of iterations allowed for the EM algorithm.
+}
+}
+
+\details{
+The function fits the conditional multivariate normal distribution described in Aitchison (1986), pages
+}
+
+\value{
+A list including:
+\item{m}{
+The mean vector in the Euclidean space.
+}
+\item{mesi}{
+The mean vector in the simplex space.
+}
+\item{S}{
+The estimated covariance matrix.
+}
+\item{loglik}{
+The log-likelhiood value.
+}
+\item{iters}{
+The number of iterations required by the EM algorithm.
+}
+}
+
+\references{
+Aitchison J. (1986). The statistical analysis of compositional data, pages 272--274.
+}
+
+\author{
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+\examples{
+mu <- c(0.325, 0.121)
+sigma <- matrix(c(0.149, -0.200,
+                  -0.200,  0.323), 2, 2)
+x <- rzerocens(100, mu, sigma)
+zerocens.em(x)
+zerocens.mle(x)
+}
+
+

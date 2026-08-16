@@ -1,0 +1,7 @@
+#useDynLib(MXM, .registration = TRUE)
+
+importFrom("quadprog", solve.QP)
+importFrom("Matrix", nearPD, Matrix, crossprod, kronecker, Diagonal)
+
+exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")

@@ -1,0 +1,15 @@
+Package: Compositionalasmr
+Type: Package
+Title: Simplicial Spatial Median Regression for Compositional Data
+Version: 1.0
+Date: 2026-08-16
+Authors@R: person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsagris@uoc.gr")
+Author: Michail Tsagris [aut, cre]
+Maintainer: Michail Tsagris <mtsagris@uoc.gr>
+Depends: R (>= 4.0)
+Imports: Compositional, minpack.lm, parallel, rangen, Rfast, stats
+Suggests: Rfast2
+Description: The alpha-spatial median regression is performed via the iteretively reweighted least squares algorithm. At first the alpha-transformation is applied and then the non-linear regression model is fitted. 
+License: GPL (>= 2)
+
+

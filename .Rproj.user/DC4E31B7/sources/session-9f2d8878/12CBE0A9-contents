@@ -1,0 +1,5 @@
+ternary.coef <- function(B, dg = FALSE, hg = FALSE, colour = NULL) {
+  Compositional::ternary.coef(B = B, dg = dg, hg = hg, colour = colour)
+}
+
+

@@ -1,0 +1,79 @@
+\name{The SCSMR model}
+\alias{scsmr}
+\title{
+Simplicial constrained spatial median regressio (SCSMR) for compositional responses and predictors
+}
+
+\description{
+Simplicial constrained spatial median regressio (SCSMR) for compositional responses and predictors.
+}
+
+\usage{
+scsmr(y, x, xnew = NULL, tol = 1e-06, eps = 1e-6)
+}
+
+\arguments{
+\item{y}{
+A matrix with the compositional data (dependent variable). Zero values are allowed.
+}
+\item{x}{
+A matrix with the compositional predictors. Zero values are allowed.
+}
+\item{xnew}{
+If you have new data use it, otherwise leave it NULL.
+}
+\item{tol}{
+The tolerance value to terminate the IRLS algortihm.
+}
+\item{eps}{
+A small value to prevent or safeguard agains no solution of the quadratic programming.
+}
+}
+
+\details{
+The function performs spatial median regression where the beta coefficients are constained
+to be positive and sum to 1. The inspiration came from the SCLS model of Tsagris (2025).
+The function uses quadratic programming (package quadprog) and the solution is very fast.
+}
+
+\value{
+A list including:
+\item{norm}{
+The mean of the square root of the sum of squares.
+}
+\item{be}{
+The beta coefficients.
+}
+\item{est}{
+The fitted of xnew if xnew is not NULL.
+}
+}
+
+\references{
+Tsagris. M. (2025). Constrained least squares simplicial-simplicial regression.
+Statistics and Computing, 35(27).
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+%\note{
+  %%  ~~further notes~~
+    %}
+
+\seealso{
+\code{\link{ascsmr} \link{scsmr.indeptest}
+}
+}
+
+\examples{
+y <- as.matrix(iris[, 1:4])
+x <- matrix( rgamma(450, 3, 5), ncol = 3)
+x <- x / rowSums(x)
+mod <- scsmr(y, x)
+mod
+}
+

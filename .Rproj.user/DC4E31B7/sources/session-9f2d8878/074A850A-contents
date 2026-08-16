@@ -1,0 +1,7 @@
+#useDynLib(MXM, .registration = TRUE)
+
+importFrom("Rfast", rowsums, mahala)
+importFrom("stats", var)
+
+exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")

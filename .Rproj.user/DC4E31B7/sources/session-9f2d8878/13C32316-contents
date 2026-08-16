@@ -1,0 +1,15 @@
+Package: Compositionalscsmr
+Type: Package
+Title: Simplically Constrained Spatial Median Regression for Compositional Data Regression
+Version: 1.0
+Date: 2026-08-11
+Authors@R: person("Michail", "Tsagris", role = c("aut", "cre"), email = "mtsagris@uoc.gr")
+Author: Michail Tsagris [aut, cre]
+Maintainer: Michail Tsagris <mtsagris@uoc.gr>
+Depends: R (>= 4.0)
+Imports: Matrix, quadprog, rangen, Rfast
+Suggests: Compositional, Rfast2
+Description: Simplicial-simplicial regression is performed via the simplicially constrained spatial median regression model. The regression coefficients are constrained to be non-negative and sum to 1. For the spatial median regression the iteratively reweighted least squares algorithm is adopted, where quadratic programming is ued to impose the constraints.
+License: GPL (>= 2)
+
+

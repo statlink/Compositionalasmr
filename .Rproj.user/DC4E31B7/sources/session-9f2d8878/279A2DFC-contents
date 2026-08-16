@@ -1,0 +1,38 @@
+\name{Compositionalasmr-package}
+\alias{Compositionalasmr-package}
+\docType{package}
+\title{
+Simplicial Spatial Median Regression for Compositional Data
+}
+
+\description{
+The alpha spatial median regression is performed via the iteretively reweighted least
+squares (IRLS) algorithm. At first the alpha-transformation is applied and then the
+non-linear regression model is fitted.
+}
+
+\details{
+\tabular{ll}{
+Package: \tab Compositionalasmr\cr
+Type: \tab Package\cr
+Version: \tab 1.0 \cr
+Date: \tab 2026-08-16 \cr
+}
+}
+
+\author{
+Michail Tsagris \email{mtsagris@uoc.gr}
+}
+
+\section{Maintainers}{
+Michail Tsagris <mtsagris@uoc.gr>.
+}
+
+\references{
+Aitchison J. (1986). The statistical analysis of compositional data.
+}
+
+
+
+
+

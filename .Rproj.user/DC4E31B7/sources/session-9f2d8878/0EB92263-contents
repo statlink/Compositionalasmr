@@ -1,0 +1,63 @@
+\name{dcln}
+\alias{dcln}
+
+\title{
+Density of the conditional logistic normal model
+}
+
+\description{
+Density of the conditional logistic normal model.
+}
+
+\usage{
+dcln(y, m, S, logged = FALSE)
+}
+
+\arguments{
+\item{y}{
+A vector or a matrix with compositional data with zero values.
+}
+\item{m}{
+The mean vector in \eqn{R^{D-1}}.
+}
+\item{S}{
+The covariance matrix in \eqn{R^{D-1}}.
+}
+\item{logged}{
+If you want the log of the density set this TRUE, otherwise leave it FALSE.
+}
+}
+
+\details{
+The function computes the density values of the conditional multivariate normal model.
+}
+
+\value{
+The density values at the given compositional data x.
+}
+
+\references{
+Aitchison J. (1986). The statistical analysis of compositional data, pages 272--274.
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+\seealso{
+\code{ \link{cln.mle}, \link{cln.contour}
+}
+}
+
+\examples{
+x <- as.vector(iris[, 4])
+y <- as.matrix(iris[, 1:3])
+y <- y / rowSums(y)
+y[sample(1:450, 15) ] <- 0
+mod <- cln.mle(y)
+f <- dcln(y, mod$m, mod$S)
+}
+
+

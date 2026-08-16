@@ -1,0 +1,58 @@
+\name{dzerocens}
+\alias{dzerocens}
+
+\title{
+Density of the conditional multivariate normal model
+}
+
+\description{
+Density of the conditional multivariate normal model.
+}
+
+\usage{
+dzeronormal(x, m, S, logged = FALSE)
+}
+
+\arguments{
+\item{x}{
+A vector or a matrix with compositional data with zero values.
+}
+\item{m}{
+The mean vector in \eqn{R^{D-1}}.
+}
+\item{S}{
+The covariance matrix in \eqn{R^{D-1}}.
+}
+\item{logged}{
+If you want the log of the density set this TRUE, otherwise leave it FALSE.
+}
+}
+
+\details{
+The function computes the density values of the conditional multivariate normal model.
+}
+
+\value{
+The density values at the given compositional data x.
+}
+
+\references{
+Aitchison J. (1986). The statistical analysis of compositional data, pages 272--274.
+}
+
+\author{
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+\examples{
+mu <- c(0.325, 0.121)
+sigma <- matrix(c(0.149, -0.200,
+                  -0.200,  0.323), 2, 2)
+x <- rzerocens(100, mu, sigma)
+mod <- zerocens.em(x)
+mu <- mod$mu
+sigma <- mod$sigma
+f <- dzerocens(x, mu, sigma)
+}
+
+

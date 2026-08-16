@@ -1,0 +1,15 @@
+#useDynLib(MXM, .registration = TRUE)
+
+importFrom("cluster", ellipsoidhull)
+importFrom("Compositional", ternary.coefcr)
+importFrom("MASS", cov.rob)
+importFrom("Matrix", nearPD)
+importFrom("quadprog", solve.QP)
+importFrom("rangen", Sample.int)
+importFrom("Rfast", rowsums)
+importFrom("graphics", lines, points, segments, text)
+importFrom("stats", predict)
+
+
+exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")

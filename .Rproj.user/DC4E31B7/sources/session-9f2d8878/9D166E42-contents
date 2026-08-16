@@ -1,0 +1,89 @@
+\name{Cross-validation for the alpha-SCSMR model}
+\alias{cv.ascsmr}
+\title{
+Cross-validation for the \eqn{alpha}-SCSMR model
+}
+
+\description{
+Cross-validation for the \eqn{alpha}-SCSMR model.
+}
+
+\usage{
+cv.ascsmr(y, x, a = seq(0.1, 1, by = 0.1), tol = 1e-6, eps = 1e-6,
+nfolds = 10, folds = NULL, seed = NULL)
+}
+
+\arguments{
+\item{y}{
+A numerical matrix with the simplicial response data. Zero values are allowed.
+}
+\item{x}{
+A matrix with the simplicial predictor variables. Zero values are allowed.
+}
+\item{a}{
+A vector or a single number of values of the \eqn{\alpha}-parameter. This has to be different from zero,
+and it can take negative values if there are no zeros in the simplicial response (y).
+}
+\item{tol}{
+The tolerance value to terminate the IRLS algortihm.
+}
+\item{eps}{
+A small value to prevent or safeguard agains no solution of the quadratic programming.
+}
+\item{nfolds}{
+The number of folds for the K-fold cross-validation, set to 10 by default.
+}
+\item{folds}{
+If you have the list with the folds supply it here. You can also leave it NULL and it will create folds.
+}
+\item{seed}{
+You can specify your own seed number here or leave it NULL.
+}
+}
+
+\details{
+The K-fold cross-validation is performed in order to select the optimal value for
+\eqn{\alpha} of the \eqn{\alpha}-SCSMR model.
+}
+
+\value{
+A list including:
+\item{runtime}{
+The runtime of the cross-validation procedure.
+}
+\item{kl}{
+The Kullback-Leibler divergence for every value of \eqn{\alpha}.
+}
+\item{js}{
+The Jensen-Shannon divergence for every value of \eqn{\alpha}.
+}
+}
+
+\references{
+Tsagris. M. (2025). Constrained least squares simplicial-simplicial regression.
+Statistics and Computing, 35(27).
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+%\note{
+%%  ~~further notes~~
+%}
+
+\seealso{
+\code{\link{ascsmr}
+}
+}
+
+\examples{
+library(MASS)
+y <- as.matrix(iris[, 1:4])
+x <- matrix( rgamma(450, 3, 5), ncol = 3)
+x <- x / rowSums(x)
+mod <- cv.ascsmr(y, x, nfolds = 5)
+}
+

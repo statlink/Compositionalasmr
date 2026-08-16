@@ -1,0 +1,45 @@
+dcln <- function(y, m, S, logged = FALSE) {
+  D <- dim(y)[2]  ;  d <- D - 1  ;  n <- dim(y)[1]
+  id1 <- which( Rfast::rowsums(y > 0) == D )
+  y1 <- y[id1, ] ;  n1 <- dim(y1)[1]
+  id2 <- Rfast::rowsums(y > 0) != D
+  y2 <- y[id2, ]
+  if (n - n1 == 1)  y2 <- matrix(y2, nrow = 1)  ;  n2 <- dim(y2)[1]
+  full <- log( y1[, -D] / y1[, D] )
+  mat <- matrix( as.numeric(y2 != 0), nrow = n2 )
+
+  F <- function(d)  cbind( diag(d), -1)
+  H <- function(d)  diag(d) + 1
+  Q.list <- vector("list", n2)  ;  obs.list <- vector("list", n2)
+  com <- t( F(d) ) %*% solve( H(d) )
+
+  for ( i in 1:n2 ) {
+    z <- mat[i, ]  ;  C <- sum(z)  ;  c <- C - 1
+    Sm <- diag(z)
+    Sm <- matrix( Sm[Rfast::rowsums(Sm) > 0, ], ncol = D)
+    Q.list[[ i ]] <- F(c) %*% Sm %*% com
+    z1 <- y2[i, ]  ;  z1 <- matrix( z1[ z1 > 0 ], nrow = 1 )
+    obs.list[[ i ]] <- if ( C > 2 )  drop( log(z1[, -C] / z1[, C]) )  else log(z1[, 1] / z1[, 2])
+  }
+
+  f <- numeric(n)
+  f[id1] <-  - 0.5 * log( det(2 * pi * S) ) - 0.5 * Rfast::mahala(full, m, S) - Rfast::rowsums( log(y1) )
+
+  f2 <- numeric(n2)
+  for ( i in seq_len(n2) ) {
+    Qi <- Q.list[[ i ]]
+    b <- obs.list[[ i ]]
+    muA <- drop(Qi %*% m)
+    SA <- Qi %*% S %*% t(Qi)
+    Ci <- length(b) + 1                     # number of nonzero parts
+    z1 <- y2[i, ]  ;  z1 <- z1[z1 > 0]
+    if ( Ci > 2 ) {
+      f2[i] <-  - 0.5 * log( det(2 * pi * SA) ) - 0.5 * t(b - muA) %*% solve(SA, b - muA) - sum( log(z1) )
+    } else {
+      f2[i] <-  - 0.5 * log(2 * pi * SA) - 0.5 * (b - muA)^2/SA - sum( log(z1) )
+    }
+  }
+  f[id2] <- f2
+  if ( !logged )  f <- exp(f)
+  f
+}

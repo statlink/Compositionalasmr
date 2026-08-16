@@ -1,0 +1,36 @@
+\name{Compositionalscsmr-package}
+\alias{Compositionalscsmr-package}
+\docType{package}
+\title{
+Simplically Constrained Spatial Median Regression for Compositional Data Regression
+}
+
+\description{
+Simplically Constrained Spatial Median Regression for Compositional Data Regression.
+}
+
+\details{
+\tabular{ll}{
+Package: \tab Compositionalscsmr\cr
+Type: \tab Package\cr
+Version: \tab 1.0 \cr
+Date: \tab 2026-08-11 \cr
+}
+}
+
+\author{
+Michail Tsagris \email{mtsagris@uoc.gr}
+}
+
+\section{Maintainers}{
+Michail Tsagris <mtsagris@uoc.gr>.
+}
+
+\references{
+Aitchison J. (1986). The statistical analysis of compositional data.
+}
+
+
+
+
+

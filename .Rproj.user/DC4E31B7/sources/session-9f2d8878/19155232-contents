@@ -1,0 +1,109 @@
+cln.reg <- function(y, x, tol = 1e-6, maxit = 500, xnew = NULL) {
+
+  D <- dim(y)[2]  ;  d <- D - 1  ;  n <- dim(y)[1]
+  x <- model.matrix( y~., data = as.data.frame(x) )
+  p <- dim(x)[2]
+
+  sel1 <- Rfast::rowsums(y > 0) == D
+  y1 <- y[sel1, ]                       ;  n1 <- dim(y1)[1]
+  x1 <- matrix( x[sel1, ], ncol = p )
+  sly1 <- sum( log(y1) )
+
+  y2 <- y[!sel1, ]
+  x2 <- matrix( x[!sel1, ], ncol = p )
+  if (n - n1 == 1)  y2 <- matrix(y2, nrow = 1)
+  n2 <- dim(y2)[1]
+
+  full <- log( y1[, -D] / y1[, D] )
+  mat <- matrix( as.numeric(y2 != 0), nrow = n2 )
+
+  F <- function(d)  cbind( diag(d), -1)
+  H <- function(d)  diag(d) + 1
+  com <- t( F(d) ) %*% solve( H(d) )
+
+  Q.list <- vector("list", n2)  ;  obs.list <- vector("list", n2)
+  for ( i in 1:n2 ) {
+    z <- mat[i, ]  ;  C <- sum(z)  ;  c <- C - 1
+    Sm <- diag(z)
+    Sm <- matrix( Sm[Rfast::rowsums(Sm) > 0, ], ncol = D)
+    Q.list[[ i ]] <- F(c) %*% Sm %*% com
+    z1 <- y2[i, ]  ;  z1 <- matrix( z1[ z1 > 0 ], nrow = 1 )
+    obs.list[[ i ]] <- if ( C > 2 )  drop( log(z1[, -C] / z1[, C]) )  else log(z1[, 1] / z1[, 2])
+  }
+
+  ## starting values: OLS regression on complete cases only
+  B <- solve( crossprod(x1), crossprod(x1, full) )
+  res1 <- full - x1 %*% B
+  S <- crossprod(res1) / n1
+  Ez <- matrix(0, n2, d)
+
+  loglik.old <- .loglik.zero.norm.reg(B, S, x1, x2, full, y1, y2, sly1, Q.list, obs.list)
+
+  for ( it in 1:maxit ) {
+
+    EzzVarSum <- 0
+    for ( i in 1:n2 ) {
+      Qi <- Q.list[[ i ]]
+      b  <- obs.list[[ i ]]
+      mu_i <- drop( crossprod(B, x2[i, ]) )
+      muA <- drop( Qi %*% mu_i )
+      SA  <- Qi %*% S %*% t(Qi)
+      K   <- S %*% t(Qi) %*% solve(SA)
+      ez  <- mu_i + drop( K %*% (b - muA) )
+      vz  <- S - K %*% Qi %*% S
+      Ez[i, ] <- ez
+      EzzVarSum <- EzzVarSum + vz
+    }
+
+    Z <- rbind(full, Ez)
+    X <- rbind(x1, x2)
+    B <- solve( crossprod(X), crossprod(X, Z) )         # GLS reduces to OLS (common S)
+
+    res1 <- full - x1 %*% B
+    res2 <- Ez - x2 %*% B
+    S <- ( crossprod(res1) + crossprod(res2) + EzzVarSum ) / n
+
+    loglik.new <- .loglik.zero.norm.reg(B, S, x1, x2, full, y1, y2, sly1, Q.list, obs.list)
+    if ( abs(loglik.new - loglik.old) < tol )  break
+    loglik.old <- loglik.new
+  }
+
+  est <- NULL
+  if ( !is.null(xnew) ) {
+    xnew <- model.matrix(~., as.data.frame(xnew) )
+    ma <- cbind( exp( xnew %*% B ), 1 )
+    est <- ma / Rfast::rowsums(ma)  ## fitted values
+    colnames(est) <- colnames(y)
+  }
+
+  colnames(B) <- colnames(y[, -1])
+  rownames(B) <- colnames(x)
+
+  list(beta = B, S = S, est = est, loglik = loglik.new, iters = it)
+}
+
+
+.loglik.zero.norm.reg <- function(B, S, x1, x2, full, y1, y2, sly1, Q.list, obs.list) {
+  n1 <- dim(y1)[1]  ;  n2 <- dim(y2)[1]
+  Sinv <- solve(S)
+  res1 <- full - x1 %*% B
+  quad1 <- sum( Rfast::rowsums( (res1 %*% Sinv) * res1 ) )
+  ll1 <-  -0.5 * n1 * log( det(2 * pi * S) ) - 0.5 * quad1 - sly1
+
+  ll2 <- 0
+  for ( i in seq_len(n2) ) {
+    Qi <- Q.list[[ i ]]
+    b  <- obs.list[[ i ]]
+    mu_i <- drop( crossprod(B, x2[i, ]) )
+    muA <- drop( Qi %*% mu_i )
+    SA  <- Qi %*% S %*% t(Qi)
+    Ci <- length(b) + 1
+    z1 <- y2[i, ]  ;  z1 <- z1[z1 > 0]
+    if ( Ci > 2 ) {
+      ll2 <- ll2 - 0.5 * log( det(2 * pi * SA) ) - 0.5 * t(b - muA) %*% solve(SA, b - muA) - sum( log(z1) )
+    } else {
+      ll2 <- ll2 - 0.5 * log(2 * pi * SA) - 0.5 * (b - muA)^2 / SA - sum( log(z1) )
+    }
+  }
+  as.numeric(ll1 + ll2)
+}

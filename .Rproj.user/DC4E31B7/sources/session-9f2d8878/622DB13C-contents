@@ -1,0 +1,62 @@
+\name{Ternary diagram with the coefficients of the SCSMR model}
+\alias{ternary.coef}
+
+\title{
+Ternary diagram with the coefficients of the SCSMR model
+}
+
+\description{
+Ternary diagram with the coefficients of the SCSMR model.
+}
+
+\usage{
+ternary.coef(B, dg = FALSE, hg = FALSE, colour = NULL)
+}
+
+\arguments{
+\item{B}{
+A matrix with the coefficients of the \code{\link{scsmr}} function. See examples for this.
+}
+\item{dg}{
+Do you want diagonal grid lines to appear? If yes, set this TRUE.
+}
+\item{hg}{
+Do you want horizontal grid lines to appear? If yes, set this TRUE.
+}
+\item{colour}{
+If you want the points to appear in different colour put a vector with the colour
+numbers or colours.
+}
+}
+
+\details{
+Ternary plot of the coefficients of the \code{\link{scsmr}} function.
+}
+
+\value{
+A ternary plot of the coefficients of the \code{\link{scsmr}} function.
+}
+
+\references{
+Tsagris. M. (2025). Constrained least squares simplicial-simplicial regression.
+Statistics and Computing, 35(27).
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+\seealso{
+\code{\link{ternary.mcr}, \link{scscmr}
+}
+}
+
+\examples{
+y <- as.matrix(iris[, 1:3])
+y <- y / rowSums(y)
+x <- rdiri(150, runif(5, 1,4) )
+mod <- scsmr(y, x)
+ternary.coef(mod$be)
+}

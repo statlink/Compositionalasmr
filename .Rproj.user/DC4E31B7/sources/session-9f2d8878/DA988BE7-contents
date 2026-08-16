@@ -1,0 +1,74 @@
+\name{The alpha-SCSMR model}
+\alias{ascsmr}
+\title{
+The \eqn{\alpha}-SCSMR model for compositional responses and predictors
+}
+
+\description{
+The \eqn{\alpha}-SCSMR model for compositional responses and predictors.
+}
+
+\usage{
+ascsmr(y, x, a = seq(0.1, 1, by = 0.1), tol = 1e-6, eps = 1e-6, xnew)
+}
+
+\arguments{
+\item{y}{
+A matrix with the compositional data (dependent variable). Zero values are allowed.
+}
+\item{x}{
+A matrix with the compositional predictors. Zero values are allowed.
+}
+\item{a}{
+A vector or a single number of values of the \eqn{\alpha}-parameter. This has to be different from zero, and it can take negative values if there are no zeros in the simplicial response (y).
+}
+\item{tol}{
+The tolerance value to terminate the IRLS algortihm.
+}
+\item{eps}{
+A small value to prevent or safeguard agains no solution of the quadratic programming.
+}
+\item{xnew}{
+The new data for which predictions will be made.
+}
+}
+
+\details{
+This is an extension of the SCSMR model that includes the \eqn{\alpha}-transformation and
+is intended solely for prediction purposes.
+}
+
+\value{
+A list with matrices containing the predicted simplicial response values,
+one matrix for each value of \eqn{\alpha}.
+}
+
+\references{
+Tsagris. M. (2025). Constrained least squares simplicial-simplicial regression.
+Statistics and Computing, 35(27).
+}
+
+\author{
+Michail Tsagris.
+
+R implementation and documentation: Michail Tsagris \email{mtsagris@uoc.gr}.
+}
+
+%\note{
+  %%  ~~further notes~~
+    %}
+
+\seealso{
+\code{\link{scsmr}, \link{cv.ascsmr}
+}
+
+\examples{
+library(MASS)
+set.seed(1234)
+y <- rdiri(214, runif(4, 1, 3))
+x <- as.matrix(fgl[, 2:9])
+x <- x / rowSums(x)
+mod <- ascsmr(y, x, xnew = x)
+mod
+}
+

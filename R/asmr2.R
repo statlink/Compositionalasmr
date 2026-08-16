@@ -1,0 +1,14 @@
+asmr2 <- function(y, x, a = c(-1, 1), xnew = NULL, maxit = 500, tol = 1e-6) {
+
+  runtime <- proc.time()
+  fun <- function(a, y, x, maxit, tol) {
+    Compositionalasmr::asmr(y = y, x = x, a = a, maxit = maxit, tol = tol)$norm
+  }
+  if ( min(y) == 0 )  a[1] <- 0
+  a <- optimize(fun, a, y = y, x = x, maxit = maxit, tol = tol)$minimum
+  runtime <- proc.time() - runtime
+  res <- Compositionalasmr::asmr(y = y, x = x[, -1], a = a, xnew = xnew)
+  res$runtime <- res$runtime + runtime
+  res$alfa <- a
+  res
+}

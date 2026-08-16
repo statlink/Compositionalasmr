@@ -1,0 +1,9 @@
+#useDynLib(MXM, .registration = TRUE)
+
+importFrom("Matrix", nearPD)
+importFrom("quadprog", solve.QP)
+importFrom("Rfast", rowsums)
+
+
+exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")

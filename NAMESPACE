@@ -1,0 +1,11 @@
+#useDynLib(MXM, .registration = TRUE)
+
+importFrom("Compositional", alfa)
+importFrom("rangen", Sample.int)
+importFrom("Rfast", rowsums, spatmed.reg)
+importFrom("minpack.lm", nls.lm)
+importFrom("stats", model.matrix, optimize)
+import("parallel")
+
+exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")
