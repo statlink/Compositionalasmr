@@ -2,12 +2,12 @@
 \alias{Compositionalasmr-package}
 \docType{package}
 \title{
-The alpha-Spatial Median Regression for Compositional Data
+Simplicial Spatial Median Regression for Compositional Data
 }
 
 \description{
-The \eqn{alpha}-spatial median regression is performed via the iteretively reweighted least
-squares (IRLS) algorithm. At first the \eqn{alpha}-transformation is applied and then the
+The alpha-spatial median regression is performed via the iteretively reweighted least
+squares (IRLS) algorithm. At first the alpha-transformation is applied and then the
 non-linear regression model is fitted.
 }
 
